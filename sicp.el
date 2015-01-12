@@ -52,6 +52,29 @@
 ;; TODO: Figure out the syntax.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Exercise 1.6
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; Evaluation results in infinite recursion, since the first thing that
+;; happens when a function is called is that all its arguments are
+;; evaluated. In this case, the result is a call stack where sqrt-iter
+;; calls new-if, which calls sqrt-iter, which calls new-if, forever.
+
+(defun new-if (p a b)
+  "If P is true A should be evaluated, else B should be evaluated."
+  (cond (p a)
+        (t b)))
+
+;; Working examples.
+(new-if (= 2 3) 0 5)
+(new-if (= 1 1) 0 5)
+
+;; Failing example. (See the *Messages* buffer.)
+(new-if (= 1 1)
+        (message "We are both evaluated since")
+        (message "we are function arguments!"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exercise 1.9
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
