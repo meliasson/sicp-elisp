@@ -2,7 +2,7 @@
 
 ;;; Commentary:
 
-;; The exercises in the computer-science text Structure and
+;; The exercises in the computer science text Structure and
 ;; Interpretation of Computer Programs, by Abelson, Sussman, and Sussman
 ;; implemented in Emacs Lisp.
 
@@ -30,13 +30,17 @@
 ;; Exercise 1.3
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun two-largest (a b c)
+  "Return two largest of A, B and C as list."
+  (if (> a b)
+      (list a (max b c))
+    (list b (max a c))))
+
 (defun sum-squares-of-two-largest (a b c)
   "Sum squares of two largest of A, B and C."
-  (if (> a b)
-      (+ (* a a) (* (max b c) (max b c)))
-    b))
+  (seq-reduce '+ (mapcar (lambda (n) (* n n)) (two-largest a b c)) 0))
 
-(sum-squares-of-two-largest 4 1 2)
+(sum-squares-of-two-largest 2 1 4)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exercise 1.4
