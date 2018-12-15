@@ -49,6 +49,15 @@
 ;; The operator is returned from the if-statement; + if b is greater
 ;; than zero and - otherwise.
 
+;; Work in progress here: Can't figure out how to return the operator.
+
+(defun a-plus-abs-b (a b)
+  "Sum A with absolute value of B."
+  ((if (> b 0)
+      '+
+    '-) a b))
+  ;((if (> b 0) '+ '-) a b))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exercise 1.5
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
