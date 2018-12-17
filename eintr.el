@@ -82,6 +82,21 @@ foo
 ;; Exercises 4.6
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(defun simplified-end-of-buffer ()
+  "Go to end of buffer."
+  (interactive)
+  (push-mark)
+  (goto-char (point-max)))
 
+(simplified-end-of-buffer)
+
+(defun print-buffer-exists-info (buffer-name)
+  "Print message saying if BUFFER-NAME exists."
+  (if (get-buffer buffer-name)
+      (message "%s exists" buffer-name)
+    (message "%s doesn't exist" buffer-name)))
+
+(buffer-exists-p "*scratch*")
+(buffer-exists-p "non-existing-buffer")
 
 ;;; eintr.el ends here
