@@ -50,19 +50,31 @@
 ;; than zero and - otherwise.
 
 ;; Work in progress here: Can't figure out how to return the operator.
-
-(defun a-plus-abs-b (a b)
-  "Sum A with absolute value of B."
-  ((if (> b 0)
-      '+
-    '-) a b))
-  ;((if (> b 0) '+ '-) a b))
+;; Can we use for example backticks or (intern "+") to accomplish
+;; something similar?
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exercise 1.5
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; TODO: Figure out the syntax.
+(defun p ()
+  "Recurse infinitely."
+  (p))
+
+(defun test (x y)
+  "Return 0 if X is 0, otherwise return Y."
+  (if (= x 0)
+      0
+    y))
+
+(test 0 (p))
+
+;; The expression above results in endless recursion. This tells us that
+;; the interpreter uses applicative-order evaluation, in which the
+;; operand (p) is evaluated before the operator test is applied. If the
+;; interpreter had used normal-order evaluation, the expression would
+;; have returned 0, since evaluation of (p) would have been delayed
+;; until needed, and when x equals 0, evaluation of (p) is never needed.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exercise 1.6

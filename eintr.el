@@ -1,4 +1,4 @@
-;;; eintr.el --- excercises from eintr.
+;;; eintr.el --- Excercises from eintr.
 
 ;;; Commentary:
 
