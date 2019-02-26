@@ -100,6 +100,62 @@
         (message "we are function arguments!"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Exercise 1.7
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun good-enough-p (guess x)
+  "Return true if difference between GUESS squared and X is small."
+  (message "good-enough-p, guess: %s, x: %s" guess x)
+  (if (< (abs (- (* guess guess) x)) 0.0001)
+      (progn
+        (message "good-enough-p, returning true")
+        t)
+    (progn
+      (message "good-enough-p, returning false")
+      nil)))
+
+(defun improve (guess x)
+  "Return new approximation by averaging GUESS with X divided by GUESS."
+  (message "improve, guess: %s, x: %s" guess x)
+  (average guess (/ x guess)))
+
+(defun average (x y)
+  "Return average of X and Y."
+  ()
+  (/ (+ x y) 2))
+
+(defun sqrt-iter (guess x)
+  "Calculate, using GUESS as starting point, square root of X."
+  (message "sqrt-iter, guess: %s, x: %s" guess x)
+  (if (good-enough-p guess x)
+      guess
+    (sqrt-iter (improve guess x) x)))
+
+(defun sqrt (x)
+  "Calculate square root of X."
+  (sqrt-iter 1.0 x))
+
+;; For very small numbers, 0.001 is too large. (sqrt 0.0004) results in
+;; sqrt-iter being invoked recursively with arguments guess and x:
+;;
+;; guess: 1.0, x: 0.0004
+;; guess: 0.5002, x: 0.0004
+;; guess: 0.2504998400639744, x: 0.0004
+;; guess: 0.12604832373535454, x: 0.0004
+;; guess: 0.06461085492374607, x: 0.0004
+;; guess: 0.0354008825558513, x: 0.0004
+;;
+;; So good-enough-p concludes that 0.035 is a sufficiently good guess,
+;; because the difference between 0.035 * 0.035 and 0.0004 is less than
+;; 0.001. We have to lower 0.001 to at least 0.0001 to get close to the
+;; correct answer 0.02.
+
+;; For very large numbers, 0.001 is too small. (sqrt 7000000000000000)
+;; results in infinite recursion because improve eventually returns the
+;; same result, 83666002.65340754, over and over. Because of limitation
+;; in precision of floats, and the rounding that therefore occurs.
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exercise 1.9
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
