@@ -105,7 +105,6 @@
 
 (defun good-enough-p (guess x)
   "Return true if difference between GUESS squared and X is small."
-  (message "good-enough-p, guess: %s, x: %s" guess x)
   (if (< (abs (- (* guess guess) x)) 0.0001)
       (progn
         (message "good-enough-p, returning true")
@@ -116,7 +115,6 @@
 
 (defun improve (guess x)
   "Return new approximation by averaging GUESS with X divided by GUESS."
-  (message "improve, guess: %s, x: %s" guess x)
   (average guess (/ x guess)))
 
 (defun average (x y)
@@ -126,7 +124,6 @@
 
 (defun sqrt-iter (guess x)
   "Calculate, using GUESS as starting point, square root of X."
-  (message "sqrt-iter, guess: %s, x: %s" guess x)
   (if (good-enough-p guess x)
       guess
     (sqrt-iter (improve guess x) x)))
@@ -154,6 +151,29 @@
 ;; results in infinite recursion because improve eventually returns the
 ;; same result, 83666002.65340754, over and over. Because of limitation
 ;; in precision of floats, and the rounding that therefore occurs.
+
+(defun new-good-enough-p (previous-guess guess)
+  "Return true if difference between PREVIOUS-GUESS and GUESS is small."
+  (if (< (abs (/ (- guess previous-guess) guess)) 0.000001)
+      (progn
+        t)
+    (progn
+      nil)))
+
+(defun new-sqrt-iter (previous-guess guess x)
+  "Calculate, using PREVIOUS-GUESS as memory and GUESS as starting point, square root of X."
+  (if (new-good-enough-p guess previous-guess)
+      guess
+    (new-sqrt-iter guess (improve guess x) x)))
+
+(defun new-sqrt (x)
+  "Calculate square root of X."
+  (sqrt-iter 0.0 1.0 x))
+
+(new-sqrt 0.0004)
+(* (new-sqrt 0.0004) (new-sqrt 0.0004))
+(- 0.0004 (* (new-sqrt 0.0004) (new-sqrt 0.0004)))
+(- 7000000000000000 (* (new-sqrt 7000000000000000) (new-sqrt 7000000000000000)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exercise 1.9
