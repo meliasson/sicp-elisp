@@ -105,13 +105,7 @@
 
 (defun good-enough-p (guess x)
   "Return true if difference between GUESS squared and X is small."
-  (if (< (abs (- (* guess guess) x)) 0.0001)
-      (progn
-        (message "good-enough-p, returning true")
-        t)
-    (progn
-      (message "good-enough-p, returning false")
-      nil)))
+  (< (abs (- (* guess guess) x)) 0.001))
 
 (defun improve (guess x)
   "Return new approximation by averaging GUESS with X divided by GUESS."
@@ -119,7 +113,6 @@
 
 (defun average (x y)
   "Return average of X and Y."
-  ()
   (/ (+ x y) 2))
 
 (defun sqrt-iter (guess x)
@@ -132,33 +125,25 @@
   "Calculate square root of X."
   (sqrt-iter 1.0 x))
 
-;; For very small numbers, 0.001 is too large. (sqrt 0.0004) results in
+;; For very small numbers, 0.001 is too large:
+;;
+;; (sqrt 0.0004) => 0.0354008825558513
+;; (- 0.0004 (* (sqrt 0.0004) (sqrt 0.0004))) => -0.0008532224857331766
 ;; sqrt-iter being invoked recursively with arguments guess and x:
 ;;
-;; guess: 1.0, x: 0.0004
-;; guess: 0.5002, x: 0.0004
-;; guess: 0.2504998400639744, x: 0.0004
-;; guess: 0.12604832373535454, x: 0.0004
-;; guess: 0.06461085492374607, x: 0.0004
-;; guess: 0.0354008825558513, x: 0.0004
-;;
-;; So good-enough-p concludes that 0.035 is a sufficiently good guess,
+;; good-enough-p concludes that 0.035 is a sufficiently good guess,
 ;; because the difference between 0.035 * 0.035 and 0.0004 is less than
 ;; 0.001. We have to lower 0.001 to at least 0.0001 to get close to the
 ;; correct answer 0.02.
-
-;; For very large numbers, 0.001 is too small. (sqrt 7000000000000000)
+;;
+;; For very large numbers, 0.001 is too small. (sqrt 9999999999999991)
 ;; results in infinite recursion because improve eventually returns the
-;; same result, 83666002.65340754, over and over. Because of limitation
+;; same result, 99999999.99999997, over and over. Because of limitation
 ;; in precision of floats, and the rounding that therefore occurs.
 
 (defun new-good-enough-p (previous-guess guess)
   "Return true if difference between PREVIOUS-GUESS and GUESS is small."
-  (if (< (abs (/ (- guess previous-guess) guess)) 0.000001)
-      (progn
-        t)
-    (progn
-      nil)))
+  (< (abs (/ (- guess previous-guess) guess)) 0.00001))
 
 (defun new-sqrt-iter (previous-guess guess x)
   "Calculate, using PREVIOUS-GUESS as memory and GUESS as starting point, square root of X."
@@ -168,12 +153,13 @@
 
 (defun new-sqrt (x)
   "Calculate square root of X."
-  (sqrt-iter 0.0 1.0 x))
+  (new-sqrt-iter 0.0 1.0 x))
 
-(new-sqrt 0.0004)
-(* (new-sqrt 0.0004) (new-sqrt 0.0004))
-(- 0.0004 (* (new-sqrt 0.0004) (new-sqrt 0.0004)))
-(- 7000000000000000 (* (new-sqrt 7000000000000000) (new-sqrt 7000000000000000)))
+;; With the suggested change in good-enough-p, and changing 0.001 to
+;; 0.00001, we get better results for both small and large numbers:
+;;
+;; (- 0.0004 (* (new-sqrt 0.0004) (new-sqrt 0.0004))) => 0.0
+;; (- 9999999999999991 (* (new-sqrt 9999999999999991) (new-sqrt 9999999999999991))) => -2.0
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exercise 1.9
