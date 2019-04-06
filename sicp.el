@@ -142,11 +142,12 @@
 ;; in precision of floats, and the rounding that therefore occurs.
 
 (defun new-good-enough-p (previous-guess guess)
-  "Return true if difference between PREVIOUS-GUESS and GUESS is small."
+  "Return t if difference between PREVIOUS-GUESS and GUESS is small."
   (< (abs (/ (- guess previous-guess) guess)) 0.00001))
 
 (defun new-sqrt-iter (previous-guess guess x)
-  "Calculate, using PREVIOUS-GUESS as memory and GUESS as starting point, square root of X."
+  "Calculate the square root of X recursively.
+PREVIOUS-GUESS serves as memory and GUESS is the guess."
   (if (new-good-enough-p guess previous-guess)
       guess
     (new-sqrt-iter guess (improve guess x) x)))
@@ -160,6 +161,33 @@
 ;;
 ;; (- 0.0004 (* (new-sqrt 0.0004) (new-sqrt 0.0004))) => 0.0
 ;; (- 9999999999999991 (* (new-sqrt 9999999999999991) (new-sqrt 9999999999999991))) => -2.0
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Exercise 1.8
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defun cbrt (x)
+  "Calculate the cube root of X."
+
+  (defun cbrt-sqrt-iter (guess prev-guess x)
+    "Calculate the cube root of X iteratively.
+The function halts when the difference between PREVIOUS-GUESS and GUESS
+is sufficiently small."
+    (if (good-enough-p guess prev-guess)
+        guess
+      (cbrt-sqrt-iter (improve guess x) guess x)))
+
+  (defun good-enough-p (guess prev-guess)
+    "Return t/nil if diff between GUESS and PREV-GUESS is small/large."
+    (< (abs (/ (- guess prev-guess) guess)) 0.00001))
+
+  (defun improve (guess x)
+    "Improve the approximate cube root GUESS of X."
+    (/ (+ (/ x (* guess guess)) (* 2 guess)) 3))
+
+  (cbrt-sqrt-iter 1.0 0.0 x))
+
+;; (* (cbrt 28) (cbrt 28) (cbrt 28))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exercise 1.9
