@@ -49,9 +49,17 @@
 ;; The operator is returned from the if-statement; + if b is greater
 ;; than zero and - otherwise.
 
-;; Work in progress here: Can't figure out how to return the operator.
-;; Can we use for example backticks or (intern "+") to accomplish
-;; something similar?
+;; Can't figure out how to return the operator. But below is something
+;; fairly similar.
+
+(defun a-plus-abs-b (a b)
+  "Add A to absolute value of B."
+  (let ((operator '+))
+    (if (< b 0) (setq operator '-))
+    (funcall operator a b)))
+
+;; (a-plus-abs-b 1 5)
+;; (a-plus-abs-b 1 -5)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Exercise 1.5
