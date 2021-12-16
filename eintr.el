@@ -3,10 +3,12 @@
 ;;; Commentary:
 
 ;; The exercises in the text An Introduction to Programming in Emacs
-;; Lisp, Revised Third Edition, by Robert J. Chassell .
+;; Lisp, Revised Third Edition, by Robert J. Chassell.
 ;;
 ;; Evaluate Elisp in Emacs for example by putting cursor after the last
-;; close-paren and type C-x C-e.
+;; close-paren and type C-x C-e.  To get the value returned by an
+;; expression to appear in the *scratch* buffer itself rather than in
+;; the echo area, type C-u C-x C-e.
 
 ;;; Code:
 
